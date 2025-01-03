@@ -1,0 +1,71 @@
+EKS CLUSTER CREATION:
+
+1.create a role with EKS or Admin permissions
+2.Create a ubuntu EC2 machine, and attach above role
+3.Install EKSCTL and KUBECTL
+4.Install Unzip and AWSCLI Latest Version
+apt update && apt install unzip -y
+
+
+AWS CLI:
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+aws --version
+
+
+EKSCTL:
+
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+
+ cd /tmp/
+ ls
+ mv eksctl /usr/local/bin
+ cd
+ eksctl
+ 
+
+ KUBECTL:
+
+ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+ 
+ ls
+ chmod +x kubectl
+ mv kubectl /usr/local/bin
+ kubectl
+ 
+ 
+ CLUSTER CREATION (CONTROL PLANE): (Before use aws configure)
+ 
+ eksctl create cluster --name "mycluster" --version 1.28 \
+--zones=ap-south-1a,ap-south-1b,ap-south-1c --without-nodegroup
+
+eksctl utils associate-iam-oidc-provider \
+--region ap-south-1 --cluster mycluster --approve
+
+
+================NodeGroup creation=====
+
+eksctl create nodegroup --cluster=mycluster --region=ap-south-1 \
+--name=mycluster-ng-1 --node-type=t2.micro \
+--nodes=2 --nodes-min=2 --nodes-max=4 --node-volume-size=20 \
+--ssh-access  --ssh-public-key=lalli \
+--managed --asg-access --external-dns-access --full-ecr-access \
+--appmesh-access --alb-ingress-access
+
+
+
+eksctl get clusters
+eksctl get nodegroup --cluster mycluster   ### ClusterName
+
+eksctl delete nodegroup --cluster mycluster --name mycluster-ng-1 ## NodeGroupName
+
+eksctl delete cluster --name=mycluster
+
+COMMANDS:
+
+sudo su
+apt update && apt install unzip -y
+
