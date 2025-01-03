@@ -1,0 +1,11 @@
+Deploy Shopping Ekart web Application:(Real Time)
+
+sudo apt update -y
+sudo su
+
+Java& Mvaen Install:
+sudo apt install openjdk-11-jre -y
+sudo apt-get install maven -y
+
+Docker installation:
+sudo apt install docker .io
